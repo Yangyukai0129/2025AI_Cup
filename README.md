@@ -1,23 +1,50 @@
 # 警示戶預測模型README
 ## 模型原理
-基於隨機森林的警示戶預測模型，使用下採樣與K折驗證，增進模型預測效能與穩定性。
+### 1. 資料前處理
+針對各個帳戶進行交易樣態的基礎統計，並加入若干進階特徵豐富訓練資訊。
+
+### 2. 模型訓練與預測
+基於**隨機森林**開發此警示戶預測模型，主要使用**下採樣集結法**，以化解警示戶類別不平衡問題。並於訓練時使用**K折驗證**增進模型預測效能與**穩健性**。
+
+最後將根據不同閾值產製預測結果，使用者可以依據當下程式診斷最佳閾值採納最佳預測方案。
 
 ## 目錄&檔案說明
 ```
 ├─Model
-|    └─trainer.py   隨機森林訓練與預測程式，包含訓練前的下採樣程序
+|    └─trainer.py   訓練前資料前處理（下採樣程序）、隨機森林訓練與預測程式
 └─Preprocess
-     └─features.py  特徵工程產製程式
-     └─loader.py    載入原始資料集util
-.gitignore          忽略檔
+     └─features.py  特徵工程：特徵欄位產製程式
+     └─loader.py    協助載入原始資料集的工具程式
+.gitignore          版本控制忽略檔
 .python-version     鎖定Python版本為3.12
-main.py             主程式、進入點，主要調用Model與Preprocess目錄程式
+main.py             主程式進入點，調用Model與Preprocess目錄程式
 pyproject.toml      專案設定檔
-README.md           專案設定文件
+README.md           專案說明文件（包含：模型原理概說、目錄&檔案說明...等）
 requirements.txt    專案所使用套件清單
-uv.lock             套件版本鎖定（本專案可使用uv）
+uv.lock             套件版本鎖定（使用uv管理本專案套件的情境）
 ```
 
+## 快速開始本專案
+### 1. 放置資料集
+於根目錄設立一新目錄`data`，於其中放置`acct_transaction.csv`、`acct_alert.csv`及`acct_predict.csv`
+
+### 2. 使用終端機於本專案根目錄執行以下命令：
+```shell
+pip install -r requirements.txt
+python main.py
+```
+
+>備註：若喜愛使用虛擬環境管理套件，本專案亦提供uv運行相關設定檔
+
 ---
-## 超參數設定
-可復現模型結果的超參數設定及資源配置，皆已記載於`trainer.py`當中
+## 超參數設定及資源配置
+可復現模型結果的超參數設定及資源配置，皆已記載於`main.py`或`trainer.py`當中。在此略提各個部分的參數設置。
+
+### 超參數設定
+- 隨機森林
+    - 隨機森林中樹的數目`n_estimators`：**150**
+    - 樹最大深度`max_depth`：**10**
+    - 節點可分支最小樣本數`min_samples_split`：**15**
+    - 節點最小持有樣本`min_samples_leaf`：**8**
+    - 權重設置`class_weight`：**balanced_subsample**
+- K折次數為5
