@@ -37,7 +37,7 @@ uv.lock             套件版本鎖定（使用uv管理本專案套件的情境�
 ```
 
 ---
-## 快速開始本專案
+## 模型使用方法
 ### 1. 放置資料集
 於根目錄設立一新目錄`data`，於其中放置`acct_transaction.csv`、`acct_alert.csv`及`acct_predict.csv`
 
